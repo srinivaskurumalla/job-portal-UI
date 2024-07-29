@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DbService } from './services/db.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'job-portal-UI';
+  constructor(public _dbService: DbService) { }
+  toggleSidebar() {
+      this._dbService.isSidebarOpen = !this._dbService.isSidebarOpen
+  }
 }

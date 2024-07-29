@@ -1,0 +1,78 @@
+{
+  "users": [
+    {
+      "empId": "1030917",
+      "email": "Srinivas.Kurumalla@infinite.com",
+      "password": "Sreenivas",
+      "role": "employee",
+      "id": 1
+    },
+    {
+      "empId": "1030860",
+      "email": "sriharsha.govindula@infinite.com",
+      "password": "Sreeharsha",
+      "role": "admin_hr",
+      "id": 2
+    },
+    {
+      "empId": "1032999",
+      "email": "ramadevi.balantrapu@infinite.com",
+      "password": "Ramadevi",
+      "role": "employee",
+      "id": 3
+    }
+  ],
+  "jobs": [
+    {
+      "brId": "21009BR",
+      "designation": "Software Engineer",
+      "skills": "Java, Angular, MySQL, AWS",
+      "experience": 5,
+      "location": "Hyderabad",
+      "status": "true",
+      "spoc": "sriharsha.govindula@infinite.com",
+      "description": "Cyber Security (Onsite to Costa Rica after 2 Months and offshore candidate need to support as per costa Rica Time)",
+      "id": 1
+    },
+    {
+      "brId": "28409BR",
+      "designation": "Salesforce Lead ",
+      "skills": "Apex , Aura",
+      "experience": 7,
+      "location": "Any Infinite Location",
+      "status": "true",
+      "spoc": "sriharsha.govindula@infinite.com",
+      "description": "Cyber Security (Onsite to Costa Rica after 2 Months and offshore candidate need to support as per costa Rica Time)",
+      "id": 2
+    }
+  ],
+  "appliedJobs": [
+    {
+      "applicationId": "AP10011030917",
+      "brId": "21009BR",
+      "empEmail": "Srinivas.Kurumalla@infinite.com",
+      "status": "Applied",
+      "poc": "sriharsha.govindula@infinite.com",
+      "appliedDate": "2024-07-29T05:41:05.019Z",
+      "id": 1
+    },
+    {
+      "applicationId": "AP10011030917",
+      "brId": "28409BR",
+      "empEmail": "Srinivas.Kurumalla@infinite.com",
+      "status": "Applied",
+      "poc": "sriharsha.govindula@infinite.com",
+      "appliedDate": "2024-07-29T05:50:29.982Z",
+      "id": 2
+    },
+    {
+      "applicationId": "AP10011032999",
+      "brId": "21009BR",
+      "empEmail": "ramadevi.balantrapu@infinite.com",
+      "status": "Applied",
+      "poc": "sriharsha.govindula@infinite.com",
+      "appliedDate": "2024-07-29T09:50:29.381Z",
+      "id": 3
+    }
+  ]
+}
