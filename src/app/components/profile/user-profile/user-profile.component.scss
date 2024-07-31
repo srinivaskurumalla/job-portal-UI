@@ -47,10 +47,10 @@
 
 .actions button {
   margin-right: 10px;
-  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  padding: 1px 13px;
 }
 
 .profile-details .section {
@@ -77,4 +77,16 @@
   display: inline-block;
   margin: 3px;
   border-radius: 20px;
+}
+
+.email{
+  font-size: small;
+  font-weight:normal;
+  text-decoration: underline;
+  color: blue;
+}
+
+.file-name {
+  margin-top: 10px;
+  font-weight: bold;
 }

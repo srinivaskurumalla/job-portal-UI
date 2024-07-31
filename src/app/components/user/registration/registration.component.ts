@@ -31,6 +31,8 @@ export class RegistrationComponent implements OnInit {
         response => {
           console.log('Registration successful', response);
           this.dbService.showSuccess('Registration success!!')
+          this.dbService.getUserData();
+
           this.router.navigate(['/login'])
         },
         error => {

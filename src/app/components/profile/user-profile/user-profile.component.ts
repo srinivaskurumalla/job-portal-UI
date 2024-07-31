@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateUserComponent } from '../create-user/create-user.component';
+import { ActivatedRoute } from '@angular/router';
+import { DbService } from 'src/app/services/db.service';
+import { tbl_employee_profile } from 'src/app/Models/tblJobs.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -9,55 +12,104 @@ import { CreateUserComponent } from '../create-user/create-user.component';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  user = {
-    name: 'Ananya Grover',
-    designation: 'UI/UX Designer',
-    location: 'Ahmedabad, Gujarat',
-    experience: 6,
-    phone: '+91 95123 56579',
-    email: 'ananya.sharma@gmail.com',
-    skills: ['User Interface Design', 'UX', 'UI', 'Adobe XD', 'Mobile App', 'User Research', 'Wireframing', 'Information Architecture'],
-    certifications: [
-      { provider: 'Microsoft', title: 'DP-900' },
-      { provider: 'Microsoft', title: 'AZ-900' },
-    ]
-  };
+  empId!: number
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  selectedFileName!: string;
 
-  userForm: FormGroup;
+  userProfile: tbl_employee_profile = {
+    empId: this.empId,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: 0,
+    skills: [],
+    experience: "0",
+    designation: '',
+    certifications: [],
+    currentProject: '',
+    currentBUName: '',
+    location: '',
+    status:''
+  }
+ 
 
-  constructor(private fb: FormBuilder,private _dialog:MatDialog) {
-    this.userForm = this.fb.group({
-      name: ['', Validators.required],
-      title: [''],
-      location: [''],
-      age: [''],
-      experience: [''],
-      ctc: [''],
-      phone: [''],
-      email: ['', Validators.required],
-      skills: this.fb.array([]),
-      certifications: this.fb.array([])
-    });
+
+  constructor( private dbService: DbService, private _dialog: MatDialog, private activatedRoute: ActivatedRoute) {
+   
 
   }
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.empId = Number(this.activatedRoute.snapshot.paramMap.get('empId')!);
+    console.log('emp id', this.empId);
+
+    this.getProfile(this.empId);
+  }
 
   downloadResume() {
     // Logic to download resume
   }
+  getProfile(empId: number) {
+    debugger
+    if (empId) {
+      this.dbService.getUserProfile(empId).subscribe(
+        (res) => {
+          if (res.message && res.message === 'Profile not found') {
+            this.userProfile.empId = empId;
+            this.dbService.showWarn('Please complete your profile');
+          } else {
+            this.userProfile = res;
+            console.log('user profile', this.userProfile);
 
-  sendEmail() {
-    // Logic to send email
-  }
-  
-  onSubmit() {
-    console.log(this.userForm.value);
-    // Submit the form data to the server or perform other actions
+          }
+        },
+        (error) => {
+          console.log('Error while fetching user profile', error);
+        }
+      );
+    }
   }
 
-  editProfile(){
+  triggerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedFileName = file.name;  // Store the file name
+      this.uploadFile(file);
+    }
+  }
+
+  uploadFile(file: File) {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+
+    // this.http.post('http://localhost:3000/upload', formData).subscribe(
+    //   (response) => {
+    //     console.log('Upload successful', response);
+    //   },
+    //   (error) => {
+    //     console.error('Upload failed', error);
+    //   }
+    // );
+  }
+
+ 
+
+  editProfile(userProfile: tbl_employee_profile) {
     console.log('Edit icon clicked!!.');
-    this._dialog.open(CreateUserComponent)
-
+    const dialogRef = this._dialog.open(CreateUserComponent, { data: userProfile })
+    dialogRef.afterClosed().subscribe((profile: tbl_employee_profile) => {
+      console.log('The dialog was closed');
+      console.log('Dialog result:', profile);
+      // Use the result data
+      if (profile) {
+        this.getProfile(profile.empId);
+      }
+    });
   }
+
+
+
 }

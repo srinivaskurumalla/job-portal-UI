@@ -3,11 +3,11 @@
 </div>
 
 <div mat-dialog-content>
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="userForm" (ngSubmit)="saveProfile()">
     <div class="row">
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>Employee Id</mat-label>
-        <input type="number" matInput formControlName="employeeId" placeholder="1030900">
+        <input type="number" matInput formControlName="empId" placeholder="1030900" [value]="dbService.loggedInUserId" >
       </mat-form-field>
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>First Name</mat-label>
@@ -34,12 +34,23 @@
     </div>
     <div class="row">
       <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Current Project</mat-label>
+        <input type="text" matInput formControlName="currentProject">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>BU Name</mat-label>
+        <input type="text" matInput formControlName="currentBUName" placeholder="Centene Corporation">
+      </mat-form-field>
+     
+    </div>
+    <div class="row">
+      <mat-form-field appearance="outline" class="form-field">
         <mat-label>Location</mat-label>
         <input type="text" matInput formControlName="location">
       </mat-form-field>
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>Experience</mat-label>
-        <input type="number" matInput formControlName="experience" placeholder="4">
+        <input type="text" matInput formControlName="experience" placeholder="4">
       </mat-form-field>
       <mat-form-field appearance="outline" class="form-field">
         <mat-label>Status</mat-label>
@@ -65,7 +76,7 @@
     </div>
     <div class="row">
       <h3>Certifications</h3>
-      <div formArrayName="skills">
+      <div formArrayName="certifications">
         <div *ngFor="let cert of certifications.controls; let i = index" class="skill-row">
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Certification</mat-label>
@@ -81,7 +92,7 @@
       </button>
     </div>
     <div mat-dialog-actions class="actionButtons">
-      <button mat-raised-button type="button" class="me-2">Cancel</button>
+      <button mat-raised-button type="button" mat-dialog-close="false" class="me-2">Cancel</button>
       <button mat-raised-button color="primary" type="submit">Save</button>
   </div>
   </form>

@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { delay, filter, map, Observable, of } from 'rxjs';
+import { catchError, delay, filter, map, Observable, of, switchMap } from 'rxjs';
 import { User } from '../Models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import { tbl_Jobs, tbl_Jobs_Applied } from '../Models/tblJobs.model';
+import { tbl_employee_profile, tbl_Jobs, tbl_Jobs_Applied } from '../Models/tblJobs.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -88,15 +88,22 @@ export class DbService {
 
   postJob(postJob: tbl_Jobs): Observable<any> {
     return this.http.post(`${this.apiUrl}/jobs`, postJob);
-
+  }
+  updateJob(brId: string, postJob: tbl_Jobs): Observable<any> {
+    return this.http.put(`${this.apiUrl}/jobs/${brId}`, postJob);
   }
   getAllJobs(): Observable<tbl_Jobs[]> {
     return this.http.get<tbl_Jobs[]>(`${this.apiUrl}/jobs`)
   }
 
+  getMyPostedJobs(adminEmail: string): Observable<tbl_Jobs[]> {
+    return this.http.get<tbl_Jobs[]>(`${this.apiUrl}/jobs`).pipe(
+      map((jobs: tbl_Jobs[]) => jobs.filter(job => job.spoc === adminEmail))
+    );
+  }
   getMyAppliedJobs(empEmail: string): Observable<tbl_Jobs_Applied[]> {
     return this.http.get<tbl_Jobs_Applied[]>(`${this.apiUrl}/appliedJobs`).pipe(
-      map((jobs:tbl_Jobs_Applied[]) => jobs.filter(job => job.empEmail === empEmail))
+      map((jobs: tbl_Jobs_Applied[]) => jobs.filter(job => job.empEmail === empEmail))
     );
   }
 
@@ -104,4 +111,57 @@ export class DbService {
     return this.http.post(`${this.apiUrl}/appliedJobs`, applyJob);
 
   }
+
+  viewApplicants(brId: string, spoc: string) {
+    return this.http.get<tbl_Jobs_Applied[]>(`${this.apiUrl}/appliedJobs`).pipe(
+      map((jobs: tbl_Jobs_Applied[]) => jobs.filter(job => job.brId === brId && job.poc === spoc))
+    );
+  }
+
+  getUserProfile(empId: number): Observable<any> {
+    debugger
+    return this.http.get<tbl_employee_profile[]>(`${this.apiUrl}/userProfiles`).pipe(
+      map((profiles: tbl_employee_profile[]) => {
+        const profile = profiles.find(profile => profile.empId === empId);
+        if (profile) {
+          return profile;
+        } else {
+          return { message: 'Profile not found', empId };
+        }
+      }),
+      catchError(error => of({ message: 'Profile not found', empId }))
+    );
+  }
+
+  insertUserProfile(profile: tbl_employee_profile): Observable<any> {
+    console.log('Inserting profile:', profile);
+    return this.http.post(`${this.apiUrl}/userProfiles`, profile).pipe(
+      catchError(error => {
+        console.error('Error inserting profile', error);
+        return of({ message: 'Error inserting profile', error });
+      })
+    );
+  }
+  updateUserProfile(profile: tbl_employee_profile): Observable<any> {
+    return this.http.put(`${this.apiUrl}/userProfiles/${profile.empId}`, profile).pipe(
+      catchError(error => of({ message: 'Error updating profile', error }))
+    );
+  }
+
+
+  saveUserProfile(profile: tbl_employee_profile): Observable<any> {
+    return this.getUserProfile(profile.empId).pipe(
+      switchMap(existingProfile => {
+        if (existingProfile.message && existingProfile.message === 'Profile not found') {
+          // Profile not found, insert new profile
+          return this.insertUserProfile(profile);
+        } else {
+          // Profile found, update existing profile
+          return this.updateUserProfile(profile);
+        }
+      }),
+      catchError(error => of({ message: 'Error saving profile', error }))
+    );
+  }
+  
 }

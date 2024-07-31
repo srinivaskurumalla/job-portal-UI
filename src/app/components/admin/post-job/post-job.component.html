@@ -78,7 +78,7 @@
             </mat-form-field>
             <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Experience</mat-label>
-                <input type="number" matInput formControlName="experience" placeholder="4">
+                <input type="text" matInput formControlName="experience" placeholder="4">
             </mat-form-field>
         </div>
         <div class="row">
@@ -98,24 +98,7 @@
 
         </div>
 
-        <!-- <div class="row">
-            <h3>Skills</h3>
-            <div formArrayName="skills">
-                <div *ngFor="let skill of skills.controls; let i = index" class="skill-row">
-                    <mat-form-field appearance="outline" class="form-field">
-                        <mat-label>Skill</mat-label>
-                        <input type="text" matInput [formControlName]="i">
-                    </mat-form-field>
-                    <button mat-icon-button type="button" (click)="removeSkill(i)">
-                        <mat-icon>remove_circle</mat-icon>
-                    </button>
-                </div>
-            </div>
-            <button mat-icon-button type="button" (click)="addSkill()">
-                <mat-icon>add_circle</mat-icon>
-            </button>
-        </div> -->
-
+       
         <div class="row">
             <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Description</mat-label>
@@ -127,8 +110,8 @@
         </div>
 
         <div mat-dialog-actions class="actionButtons">
-            <button mat-raised-button type="button" class="me-2">Cancel</button>
-            <button mat-raised-button color="primary" type="submit">Save</button>
+            <button mat-raised-button type="button" [matDialogClose]="false" class="me-2">Cancel</button>
+            <button  mat-raised-button color="primary" type="submit">{{data ? 'Update' : 'Save'}}</button>
         </div>
     </form>
 </div>

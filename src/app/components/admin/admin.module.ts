@@ -9,13 +9,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AllJobsComponent } from './all-jobs/all-jobs.component';
 import { FieldsetModule } from 'primeng/fieldset';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ViewApplicantsComponent } from './view-applicants/view-applicants.component';
+import { RouterModule } from '@angular/router';
 
-
+import { TableModule } from 'primeng/table'; 
 @NgModule({
   declarations: [
     postJobComponent,
-    AllJobsComponent
+    AllJobsComponent,
+    ViewApplicantsComponent
   ],
   imports: [
     CommonModule,
@@ -27,8 +30,10 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatInputModule,
     FieldsetModule,
     MatExpansionModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule,
+    TableModule
   ],
-  exports: [postJobComponent,AllJobsComponent]
+  exports: [postJobComponent, AllJobsComponent]
 })
 export class AdminModule { }

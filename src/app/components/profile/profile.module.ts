@@ -4,11 +4,12 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import {MatIconModule} from '@angular/material/icon';
 import { CreateUserComponent } from './create-user/create-user.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import { FormControl, FormGroupDirective, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button'
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { AppliedJobsComponent } from './applied-jobs/applied-jobs.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -21,7 +22,8 @@ import { AppliedJobsComponent } from './applied-jobs/applied-jobs.component';
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    RouterModule
   
   ],
   exports:[UserProfileComponent,CreateUserComponent,AppliedJobsComponent]

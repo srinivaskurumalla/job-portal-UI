@@ -14,22 +14,30 @@
 <mat-toolbar class="navbar" [class.sticky]="isSticky">
   <mat-toolbar-row>
     <img class="logo" src="assets/profileImages/Infinite_logo.png" alt="logo">
-    <span>Infinite</span>
     <span class="spacer"></span>
 
     <button mat-button routerLinkActive="active" routerLink="/home" class="option">Home</button>
-    <button *ngIf="dbService.loggedInUserRole === 'admin_hr'" mat-button routerLinkActive="active"
-      routerLink="/post-job" class="option">Post a Job</button>
-    <button *ngIf="dbService.loggedInUserRole === 'employee'" mat-button routerLinkActive="active" routerLink="/find-jobs"
-      class="option">Find a Job</button>
-    <button *ngIf="dbService.loggedInUserRole === 'admin_hr'" mat-button routerLinkActive="active" routerLink="/my-jobs"
-      class="option">Posted Jobs</button>
-    <button *ngIf="dbService.loggedInUserRole === 'employee'" mat-button routerLinkActive="active" routerLink="/applied-jobs"
-      class="option">Applied Jobs</button>
-    <button mat-button routerLinkActive="active" routerLink="/contact" class="option">Contact</button>
-
+    <div *ngIf="dbService.isUserLoggedIn">
+      <button *ngIf="dbService.loggedInUserRole === 'admin_hr'" mat-button routerLinkActive="active"
+        routerLink="/post-job" class="option">Post a Job</button>
+      <button *ngIf="dbService.loggedInUserRole === 'employee'" mat-button routerLinkActive="active"
+        routerLink="/find-jobs" class="option">Find a Job</button>
+      <button *ngIf="dbService.loggedInUserRole === 'admin_hr'" mat-button routerLinkActive="active"
+        routerLink="/all-jobs" class="option">All Jobs</button>
+      <button *ngIf="dbService.loggedInUserRole === 'admin_hr'" mat-button routerLinkActive="active"
+        routerLink="/my-jobs" class="option">My Jobs</button>
+      <button *ngIf="dbService.loggedInUserRole === 'employee'" mat-button routerLinkActive="active"
+        routerLink="/applied-jobs" class="option">Applied Jobs</button>
+      <button mat-button routerLinkActive="active" routerLink="/contact" class="option">Contact</button>
+    </div>
     <span class="spacer"></span>
-    <button *ngIf="dbService.isUserLoggedIn" mat-button (click)="logout()">Logout</button>
+    <div *ngIf="dbService.isUserLoggedIn" mat-button [matMenuTriggerFor]="beforeMenu">
+      <mat-icon class="profile">account_circle</mat-icon>
+    </div>
+    <mat-menu #beforeMenu="matMenu" xPosition="before">
+      <button mat-menu-item (click)="profile(dbService.loggedInUserId)" *ngIf="dbService.loggedInUserRole === 'employee'">Profile</button>
+      <button mat-menu-item (click)="logout()">Logout</button>
+    </mat-menu>
     <button *ngIf="!dbService.isUserLoggedIn" mat-button (click)="logout()">Login</button>
 
   </mat-toolbar-row>

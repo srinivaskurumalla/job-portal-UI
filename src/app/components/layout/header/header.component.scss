@@ -57,7 +57,6 @@ i {
     }
 }
 
-/////////
 
 .navbar {
     position: fixed;
@@ -79,21 +78,25 @@ i {
 
 .option {
     position: relative;
-    /* Position relative to place the border */
 }
 
 .option:hover {
     background-color: #f0f0f0;
-    /* Background color on hover */
 }
 
 .option.active {
     border-bottom: 2px solid #007bff;
-   // background-color: #f0f0f0;
     color: #007bff;
-    /* Color of the bottom border for the active link */
 }
 
 .logo {
     width: 100px;
+}
+
+.profile{
+    cursor: pointer;
+}
+.profile:hover{
+    background-color: rgb(201, 194, 194);
+    border-radius: 50%;
 }

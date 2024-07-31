@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { tbl_Jobs, tbl_Jobs_Applied } from 'src/app/Models/tblJobs.model';
 import { DbService } from 'src/app/services/db.service';
+import { postJobComponent } from '../post-job/post-job.component';
 interface ExtendedJob extends tbl_Jobs {
   panelOpenState: boolean;
 }
@@ -12,33 +15,41 @@ interface ExtendedJob extends tbl_Jobs {
 export class AllJobsComponent implements OnInit {
   panelOpenState = false;
   allJobs: ExtendedJob[] = []
-  myAppliedJobs: tbl_Jobs_Applied[] = []
-  constructor(public dbService: DbService) { }
+  url: string = ''
+  // myAppliedJobs: tbl_Jobs_Applied[] = []
+  myPostedJobs: tbl_Jobs[] = [];
+
+  appliedJobs: tbl_Jobs_Applied[] = [];
+  constructor(public dbService: DbService, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    if (this.dbService.loggedInUserRole === 'admin_hr')
+    this.url = this.router.url;
+
+    if (this.dbService.loggedInUserRole === 'admin_hr') {
       this.loadAllJobs();
+      console.log('url', this.url);
+      if (this.url === '/my-jobs') {
+        this.loadMyJobs(this.dbService.loggedInUserEmail)
+      }
+    }
     if (this.dbService.loggedInUserRole === 'employee') {
-      this.loadMyAppliedJobs();
+      // this.loadMyAppliedJobs();
       this.loadAllJobs();
     }
   }
-
-  loadMyAppliedJobs(): void {
-    this.dbService.getMyAppliedJobs(this.dbService.loggedInUserEmail).subscribe(
-      (data: tbl_Jobs_Applied[]) => {
-        // Initialize panelOpenState for each job
-        this.myAppliedJobs = data.map(job => ({ ...job, panelOpenState: false }));
-        console.log('my applied jobs with panel state', this.myAppliedJobs);
-
-
+  loadMyJobs(email: string) {
+    debugger
+    this.dbService.getMyPostedJobs(email).subscribe(
+      (data: tbl_Jobs[]) => {
+        this.myPostedJobs = data;
       },
       (error) => {
-        this.dbService.showError('Error while fetching applied jobs data');
-        console.error('Error fetching applied  jobs', error);
+        this.dbService.showError('Error while fetching jobs data');
+        console.error('Error fetching my posted jobs', error);
       }
-    );
+    )
   }
+
   loadAllJobs(): void {
     this.dbService.getAllJobs().subscribe(
       (data: tbl_Jobs[]) => {
@@ -62,7 +73,7 @@ export class AllJobsComponent implements OnInit {
   applyJob(job: tbl_Jobs) {
     console.log('apply job', job);
     let applyJob: tbl_Jobs_Applied = {
-      applicationId: 'AP1001' + this.dbService.loggedInUserId, //auto generate in sql
+      applicationId: 'AP1001_' + this.dbService.loggedInUserId, //auto generate in sql
       brId: job.brId,
       empEmail: this.dbService.loggedInUserEmail,
       status: 'Applied',
@@ -72,8 +83,8 @@ export class AllJobsComponent implements OnInit {
     this.dbService.applyJob(applyJob).subscribe(
       (res) => {
         console.log(res.value);
-         // Update the job to reflect that it has been applied
-         job.isApplied = true;
+        // Update the job to reflect that it has been applied
+        job.isApplied = true;
         this.dbService.showSuccess('Applied Successfully')
       },
       (error) => {
@@ -83,5 +94,14 @@ export class AllJobsComponent implements OnInit {
       }
     )
 
+  }
+
+
+
+  viewApplicants(brId: string, spoc: string) {
+    this.router.navigate(['/view-applicants', brId, spoc]);
+  }
+  openEditJobForm(job: tbl_Jobs) {
+    this.dialog.open(postJobComponent, { data: job })
   }
 }

@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/home']); //  redirect to dashboard
             this.dbService.isUserLoggedIn = true
             this.dbService.getUserData();
+
             console.log('logged in user id: ', this.dbService.loggedInUserId);
             console.log('logged in user role: ', this.dbService.loggedInUserRole);
 

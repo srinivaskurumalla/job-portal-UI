@@ -35,5 +35,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/login']);
     sessionStorage.clear();
   }
+  profile(empId:number){
+    this.router.navigate(['/profile',empId])
+  }
 
 }
