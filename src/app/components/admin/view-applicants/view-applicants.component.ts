@@ -50,4 +50,8 @@ export class ViewApplicantsComponent implements OnInit {
       );
     }
   }
+
+  edit(brId:string, empEmail:string,spoc:string){
+
+  }
 }

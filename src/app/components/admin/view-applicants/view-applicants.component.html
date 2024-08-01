@@ -6,6 +6,7 @@
         [paginator]="true" [tableStyle]="{'min-width': '60rem'}" >
         <ng-template pTemplate="header">
             <tr>
+                <th>Edit</th>
                 <th pSortableColumn="brId" style="width:20%">
                     BR ID <p-sortIcon field="brId"></p-sortIcon>
                 </th>
@@ -27,6 +28,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-job>
             <tr>
+                <td><mat-icon>edit</mat-icon></td>
                 <td>{{ job.brId }}</td>
                 <td class="email">{{ job.empEmail }}</td>
                 <td class="email">{{ job.poc }}</td>
